@@ -1,0 +1,1 @@
+{"version":3,"file":"interface_bind_key.js","sourceRoot":"","sources":["../src/interface_bind_key.ts"],"names":[],"mappings":";;AAAa,QAAA,gBAAgB,GAAG;IAC5B,GAAG,EAAE,MAAM,CAAC,GAAG,CAAC,KAAK,CAAC;IACtB,OAAO,EAAE,MAAM,CAAC,GAAG,CAAC,SAAS,CAAC;IAC9B,YAAY,EAAE,MAAM,CAAC,GAAG,CAAC,cAAc,CAAC;CAE3C,CAAC"}
