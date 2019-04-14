@@ -42,7 +42,9 @@ export class EventController {
                     if ( action == "ADD") {
                         await reviewService.writeReview(reviewId, content, attachedPhotoIds, userId, placeId);
                         res.status(StatusCode.OK_200).json({ result : "insert success "  });
-                    }
+                    } else if ( action == "MOD") {}
+                    else if ( action == "DELETE") {}
+
                 }
 
 

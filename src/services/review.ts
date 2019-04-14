@@ -9,8 +9,6 @@ import {IPointService, PointService} from "./point";
 import {PointType, SAVE_POINT_VALUE} from "../utils/point_type_code";
 import {IPointHistoryService} from "./pointHistory";
 
-
-
 export interface IReviewService {
 
     // 리뷰를 작성한다
@@ -38,22 +36,16 @@ export class ReviewService implements IReviewService{
     }*/
 
     public async writeReview(reviewId: string, content: string, attachedPhotoIds: string[], userId: string, placeId: string) {
-       /*
-        console.log('revie' +reviewId);
-        console.log('content ' + content);
-        console.log('attachedPhotho' + attachedPhotoIds);
-        console.log('userId' + userId);
-        console.log('placId'+ placeId);
-*/
+
         console.log("call writeReview")
         // 1. review을 디비에 등록
         await this.insertReviewInfo(reviewId, content, attachedPhotoIds, userId, placeId).then( () => {
-            this.saveBonusPointWhenAdd(userId, reviewId, content, attachedPhotoIds, placeId);
+            this.saveBonusPoint(userId, reviewId, content, attachedPhotoIds, placeId);
         })
 
     }
 
-    private async saveBonusPointWhenAdd(userId: string, reviewId: string, content: string, attachedPhotoIds: string[], placeId: string ) : Promise<void>{
+    private async saveBonusPoint(userId: string, reviewId: string, content: string, attachedPhotoIds: string[], placeId: string ) : Promise<void>{
         console.log("call saveBonusPointWhenAdd")
         // 내용이 1글자 이상 1점
         if ( content.length >= 1 ) {
