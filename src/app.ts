@@ -1,31 +1,43 @@
-import {IEnv} from "./IEnv";
+import {IEnv} from "../IEnv";
 import { Container, interfaces } from "inversify";
 import "reflect-metadata"
 import express from "express";
 import { interfaceBindKey } from "./interface_bind_key";
-import {PointController} from "./controllers/point";
+import {EventController} from "./controllers/event";
 import bodyParser = require("body-parser");
 import compression from "compression";
 import expressValidator from "express-validator";
+
+import * as lusca from "lusca";
+import {ITypeormService, TypeormService} from "./services/typeorm";
 import {PointService} from "./services/point";
+import {ReviewService} from "./services/review";
+import {PointHistoryService} from "./services/pointHistory";
+
 
 export async function buildContainer(env: IEnv) {
-    const container: interfaces.Container = new Container();
-    container.bind(interfaceBindKey.env).toConstantValue(env);
 
+    const container: interfaces.Container = new Container();
+
+    container.bind(interfaceBindKey.env).toConstantValue(env);
     const app = express();
     container.bind<express.Express>(interfaceBindKey.express).toConstantValue(app);
-
+    container.bind<ITypeormService>(interfaceBindKey.typeormService).toConstantValue(await TypeormService.getInstance(env.getDbConf()));
     app.set("port", env.getPort());
     app.use(compression());
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({extended: true}));
     app.use(expressValidator());
 
-    container.bind(interfaceBindKey.pointService).to(PointService).inSingletonScope();
+    app.use(lusca.xframe("SAMEORIGIN"));
+    app.use(lusca.xssProtection(true));
 
-    container.bind(PointController).to(PointController).inSingletonScope();
-    app.post("/point", container.get(PointController).postPoint());
+    container.bind(interfaceBindKey.pointService).to(PointService).inSingletonScope();
+    container.bind(interfaceBindKey.reviewService).to(ReviewService).inSingletonScope();
+    container.bind(interfaceBindKey.pointHistoryService).to(PointHistoryService).inSingletonScope();
+
+    container.bind(EventController).to(EventController).inSingletonScope();
+    app.post("/events", container.get(EventController).postEvents());
 
     return container;
 }

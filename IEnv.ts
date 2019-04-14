@@ -11,20 +11,27 @@ export interface IEnv {
         "username": string,
         "password": string,
         "database": string,
-        "synchronize": boolean
+        "synchronize": boolean,
+        "logging" : boolean,
+        "entities" : string[]
     };
 }
 
 export class DevEnv implements IEnv {
-    getDbConf() : { type: "mysql"; host: string; port: number; username: string; password: string; database: string; synchronize: boolean; } {
+
+    getDbConf() : { type: "mysql"; host: string; port: number; username: string; password: string; database: string; synchronize: boolean;  logging : boolean; entities: string[] } {
         return {
             type: "mysql",
-            host: "127.0.0.1",
+            host: "localhost",
             port: 3306,
+            username: "yang",
+            password: "yang123",
             database: "triple",
-            username: "root",
-            password: "root",
-            synchronize: true
+            synchronize: true,
+            logging: true,
+            entities: [
+                __dirname + "/src/entities/**/*"
+            ]
         };
     }
 

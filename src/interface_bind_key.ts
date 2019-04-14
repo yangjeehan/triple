@@ -1,6 +1,8 @@
 export const interfaceBindKey = {
     env: Symbol.for("env"),
     express: Symbol.for("express"),
-    pointService: Symbol.for("pointService")
-
+    typeormService: Symbol.for("typeormService"),
+    pointService: Symbol.for("pointService"),
+    reviewService: Symbol.for("reviewService"),
+    pointHistoryService: Symbol.for("pointHistoryService")
 };

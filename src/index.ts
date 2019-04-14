@@ -1,4 +1,4 @@
-import { IEnv, DevEnv } from "./IEnv";
+import { IEnv, DevEnv } from "../IEnv";
 import { buildApp } from "./app";
 import * as express from "express";
 
