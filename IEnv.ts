@@ -27,7 +27,7 @@ export class DevEnv implements IEnv {
             username: "yang",
             password: "yang123",
             database: "triple",
-            synchronize: true,
+            synchronize: false,
             logging: true,
             entities: [
                 __dirname + "/src/entities/**/*"

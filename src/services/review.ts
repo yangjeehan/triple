@@ -8,6 +8,7 @@ import {Place} from "../entities/place";
 import {IPointService, PointService} from "./point";
 import {PointType, SAVE_POINT_VALUE} from "../utils/point_type_code";
 import {IPointHistoryService} from "./pointHistory";
+import {__await} from "tslib";
 
 export interface IReviewService {
 
@@ -50,24 +51,22 @@ export class ReviewService implements IReviewService{
         // 내용이 1글자 이상 1점
         if ( content.length >= 1 ) {
             //savePoint( userId: string, reviewId: string, pointType: string, amount: number ): Promise<void>;
-            this.pointService.savePoint(userId, reviewId, PointType.CONTENT_POINT, SAVE_POINT_VALUE.DEFAULT);
+            await this.pointService.savePoint(userId, reviewId, PointType.CONTENT_POINT, SAVE_POINT_VALUE.DEFAULT);
         }
 
         // 1장이상 사진 첨부 1점
-
         if (attachedPhotoIds.length >= 1) {
-            if( attachedPhotoIds[0] != "") {
-                this.pointService.savePoint(userId, reviewId, PointType.ATTACH_PHOTO_BONUS_POINT, SAVE_POINT_VALUE.DEFAULT);
+            if( attachedPhotoIds[0] != "" ) {
+                await this.pointService.savePoint(userId, reviewId, PointType.ATTACH_PHOTO_BONUS_POINT, SAVE_POINT_VALUE.DEFAULT);
             }
         }
 
         // 특정장소에 첫 리뷰작성 1점
-        let reviewSize = await this.searchFirstReview(placeId);
-        console.log(" review size" + reviewSize)
-
-        if( reviewSize == 1 ) {
-            this.pointService.savePoint(userId, reviewId, PointType.FIRST_PLACE_REVIEW, SAVE_POINT_VALUE.DEFAULT);
-        }
+        await this.searchFirstReview(placeId).then(reviewSize =>{
+            if( reviewSize == 1 ) {
+                this.pointService.savePoint(userId, reviewId, PointType.FIRST_PLACE_REVIEW, SAVE_POINT_VALUE.DEFAULT);
+            }
+        })
     }
 
     // review중 placeId을 찾는다.
@@ -154,7 +153,7 @@ export class ReviewService implements IReviewService{
             const result = await reviewRepo.findAndCount();
 
             let cnt = 0;
-            if( result != undefined){
+            if( result ){
                 cnt = result[1];
             }
             return cnt;

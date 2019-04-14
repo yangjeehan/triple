@@ -106,7 +106,7 @@ export class PointHistoryService implements IPointHistoryService {
                 .setParameters({ userId: userId , reviewId: reviewId})
                 .getOne();
 
-            if (result == undefined) {
+            if (!result) {
                 revision = 0;
             } else {
                 revision = result.revision + 1;
@@ -133,7 +133,7 @@ export class PointHistoryService implements IPointHistoryService {
             const result = await pointHistoryRepo.findAndCount();
 
             let cnt = 0;
-            if( result != undefined){
+            if( result ){
                 cnt = result[1];
             }
             return cnt;

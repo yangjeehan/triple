@@ -29,11 +29,7 @@ export class PointService {
         this.typeormService = typeormService;
         this.pointHistoryService = pointHistoryService;
     }
-/*
-    public constructor(  typeormService : ITypeormService,  pointHistoryService: IPointHistoryService) {
-        this.typeormService = typeormService;
-        this.pointHistoryService = pointHistoryService;
-    }*/
+
     public async savePoint(userId: string, reviewId: string ,pointType: string, amount: number ) : Promise<void>{
 
         console.log("call savePoint")
@@ -65,7 +61,6 @@ export class PointService {
                 if( point == undefined ){
                     this.insertAddedPoint(userId, point, amount).then(totalAmount => {
                         // history에 업데이트
-                        //userId : string ,reviewId : string ,amount : number, action: string, pointType: string, totalUserPoint: number
                         this.pointHistoryService.loggingPointHistory(userId, reviewId, amount, action, pointType, totalAmount);
                     }).catch(err =>{
                         console.log(err)
@@ -113,7 +108,6 @@ export class PointService {
                 .set({ amount: totalAmount})
                 .where("userId = :user", {user : userId})
                 .execute();
-            console.log(totalAmount)
             console.log(totalAmount)
 
 
